@@ -8,7 +8,7 @@ export class Register extends HTMLElement {
     const boton = document.querySelector(".send");
     const form = document.querySelector(".form");
     const input = document.querySelector(".input");
-    const h2 = document.querySelector(".h2");
+    const loading = document.querySelector(".loading");
     const atras = document.querySelector(".atras");
 
     atras.addEventListener("click", () => {
@@ -20,7 +20,7 @@ export class Register extends HTMLElement {
       boton.classList.add("display");
       label.classList.add("display");
       input.classList.add("display");
-      h2.classList.replace("display", "cargando");
+      loading.classList.replace("display", "cargando");
       const targete = e.target as any;
 
       if (targete.nombre.value == "") {
@@ -58,7 +58,7 @@ export class Register extends HTMLElement {
         
         <div>
             <form class="form">
-            <h2 class="display h2">Cargando</h2>
+            <text-comp class="display loading" variant="body">Cargando..</text-comp>
                 <div class="label-container gap"><label class="label">Tu nombre</label></div>
                 <input class="input" type="text" autocomplete="off" maxlength="10" minlength="1" name="nombre" >
                 <button class="botonAnim send boton">Enviar</button>

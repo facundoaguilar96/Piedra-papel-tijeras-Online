@@ -5,13 +5,12 @@ export class GoRoom extends HTMLElement {
   connectedCallback() {
     this.render();
 
-    const boton = document.querySelector(".boton");
     const formulario = document.querySelector(".formulario");
-    const input = document.querySelector(".input");
-    const h2 = document.querySelector(".h2");
+    const hidden = document.querySelector(".hidden");
+    const volver = document.querySelector(".volver");
 
-    const atras = document.querySelector(".atras");
-    atras.addEventListener("click", () => {
+    const load = document.querySelector(".load");
+    volver.addEventListener("click", () => {
       Router.go("/");
     });
 
@@ -22,10 +21,10 @@ export class GoRoom extends HTMLElement {
     formulario.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      boton.classList.add("display");
+      load.classList.replace("display", "cargando");
 
-      input.classList.add("display");
-      h2.classList.replace("display", "cargando");
+      hidden.classList.add("display");
+
       const targete = e.target as any;
 
       if (targete.room.value == "") {
@@ -85,16 +84,18 @@ export class GoRoom extends HTMLElement {
   render() {
     this.innerHTML = `
     <div class="container">
-    <button-comp variant="30px" class="atras">←</button-comp>
-    <div class="text-container">
-      <text-comp variant="title">Piedra Papel ó Tijeras</text-comp>
-    </div>
+      <div class="volver atras">
+        <button-comp variant="30px">←</button-comp> 
+      </div>
+      <div class="text-container">
+        <text-comp variant="title">Piedra Papel ó Tijeras</text-comp>
+      </div>
+      <text-comp class="load display" variant="body">Cargando..</text-comp>
+          
         <div>
-           <h2 class="display h2">Cargando</h2>
-            <form class="formulario">
-            
-                <input class="input" type="text" autocomplete="off" name="room" placeholder="Código" >
-                <button class="botonAnim boton">Ingresar a la sala</button>
+            <form class="formulario hidden">
+            <input class="input" type="text" autocomplete="off" name="room" placeholder="Código">
+            <button class="botonAnim boton">Ingresar a la sala</button>
             </form>
         </div>
         
@@ -108,10 +109,10 @@ export class GoRoom extends HTMLElement {
    body{
     
    }
-   .cargando{
-    display: inherit;
-    font-size: 100px;
-    }
+   .center-h3{
+    width: 100%;
+    text-align:center;
+   }
     .container{
       display: flex;
       width: 100%;
@@ -136,6 +137,9 @@ export class GoRoom extends HTMLElement {
     font-size:24px;
     height: 28px;
   
+  }
+  .load{
+    font-size:24px;
   }
   .form{
     font-weight: bold;
@@ -186,9 +190,7 @@ export class GoRoom extends HTMLElement {
  font-size: 100px;
  }
  
-.display{
- display: none;
-}
+
 .label{
  font-size:30px;
  height: 28px;
@@ -202,10 +204,9 @@ export class GoRoom extends HTMLElement {
  color: white;
  
 }
-.h1{
- font-size: 52px;
- font-family: 'Times New Roman', Times, serif;
- font-weight: bold;
+.h2-container{
+ width:100%;
+ padding:20px;
 }
 
 .boton{
@@ -287,7 +288,11 @@ left:inherit;
  
  justify-content: center;
 }
-}`;
+}
+.cargando{
+  display: inherit;
+  font-size: 100px;
+  }`;
 
     this.appendChild(style);
   }

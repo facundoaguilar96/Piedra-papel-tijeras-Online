@@ -8,7 +8,7 @@ export class RegisterNameRoom extends HTMLElement {
     const boton = document.querySelector(".boton");
     const form = document.querySelector(".form");
     const input = document.querySelector(".input");
-    const h2 = document.querySelector(".h2");
+    const loading = document.querySelector(".loading");
 
     const atras = document.querySelector(".atras");
     atras.addEventListener("click", () => {
@@ -20,7 +20,7 @@ export class RegisterNameRoom extends HTMLElement {
       boton.classList.add("display");
       label.classList.add("display");
       input.classList.add("display");
-      h2.classList.replace("display", "cargando");
+      loading.classList.replace("display", "cargando");
       const targete = e.target as any;
 
       if (targete.nombre.value == "") {
@@ -64,8 +64,9 @@ export class RegisterNameRoom extends HTMLElement {
       <text-comp variant="title">Piedra Papel ó Tijeras</text-comp>
     </div>
         <div>
+        <text-comp class="display loading" variant="body">Cargando..</text-comp>
             <form class="form">
-            <h2 class="display h2">Cargando</h2>
+            
             <div class="label-container gap"><label class="label">Tu nombre</label></div>
                 <input class="input" type="text" autocomplete="off" maxlength="10" minlength="1" name="nombre" >
                 <button class="botonAnim boton">Enviar</button>
@@ -113,6 +114,14 @@ export class RegisterNameRoom extends HTMLElement {
     color: white;
     
   }
+  .h2-container{
+    width:100%;
+    padding:20px;
+   }
+
+   .asd{
+    font-size: 20px;
+   }
   .h1{
     font-size: 52px;
     font-family: 'Times New Roman', Times, serif;

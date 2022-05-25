@@ -8,8 +8,8 @@ export class Rules extends HTMLElement {
     const cs = state.getState();
     console.log(cs.win);
     const ready = document.querySelector(".ready");
-    const h2 = document.querySelector(".h2");
-    const h1 = document.querySelector(".h1");
+    const hidden = document.querySelector(".hidden");
+    const listo = document.querySelector(".listo");
 
     window.addEventListener("beforeunload", function (event) {
       state.playerOffline();
@@ -18,6 +18,8 @@ export class Rules extends HTMLElement {
 
     ready.addEventListener("click", () => {
       state.playerReady();
+      listo.classList.replace("display", "displayOn");
+      hidden.classList.add("display");
     });
 
     state.subscribe(() => {
@@ -33,6 +35,7 @@ export class Rules extends HTMLElement {
       }
     });
   }
+  game = state.filterWin();
   name = state.getState().currentGame[0].name;
   name2 = state.getState().currentGame[1].name;
   room = state.getState().roomId;
@@ -42,19 +45,20 @@ export class Rules extends HTMLElement {
     <div class="container">
       <div class="header-cont">
         <div>
-            <h3 class="h3"> ${this.name}: 0</h3>
-            <h3 class="h3"> ${this.name2}: 0</h3>
+            <h3 class="h3"> ${this.name}: ${this.game.counterPlayer1}</h3>
+            <h3 class="h3"> ${this.name2}: ${this.game.counterPlayer2}</h3>
         </div>
         <div>
           <h3 class="h3">Sala: ${this.room}</h3>
         </div>
       </div>
-        
+      <div class="listo display"><text-comp variant="body">Esperando a que el rival presione ¡Jugar!...</text-comp></div>
+      <div class="hidden body-container">
         <text-comp variant="body">Presioná jugar
         y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.</text-comp>
-        <h2 class="h2">Esperando a que el rival le de listo</h2>
-        <div class="buttom-container"><button-comp  variant="35px" class=" ready">Jugar!</button-comp></div>
-    
+        
+        <div class="buttom-container"><button-comp  variant="35px" class=" ready">¡Jugar!</button-comp></div>
+      </div>
         
     </div>
         `;
@@ -69,6 +73,14 @@ export class Rules extends HTMLElement {
    .buttom-container{
     width:100%;
     max-width:404px;
+}
+.body-container{
+  display: flex;
+  flex-direction: column;
+  gap:5vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
    .header-cont{
     display: flex;

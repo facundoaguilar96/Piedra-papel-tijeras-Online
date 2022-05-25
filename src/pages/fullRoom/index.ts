@@ -5,18 +5,26 @@ export class FullRoom extends HTMLElement {
   connectedCallback() {
     this.render();
 
-    const boton = document.querySelector(".button");
-    boton.addEventListener("click", () => {
+    const inicio = document.querySelector(".inicio");
+
+    inicio.addEventListener("click", () => {
       Router.go("/");
     });
   }
 
   render() {
     this.innerHTML = `
-    <div class="contenedor">
-        <h1>Piedra papel o tijeras</h1>
-        <h2>Ups, esta sala está completa y tu nombre no coincide con nadie en la sala.</h2>
-        <button class="button boton">Inicio</button>
+    <div class="container">
+    
+        <div class="text-container">
+          <text-comp variant="title">Piedra Papel ó Tijeras</text-comp>
+        </div>
+        
+
+        <text-comp variant="body">Ups, esta sala está completa y tu nombre no coincide con nadie en la sala.</text-comp>
+        <div class="buttom-container"><button-comp class="inicio" variant="35px">Volver</button-comp></div>
+        
+        </div>    
     </div>
         `;
     const style = document.createElement("style");
@@ -24,48 +32,29 @@ export class FullRoom extends HTMLElement {
     *{
       box-sizing: border-box;
   }
-   body{
-    
-   }
-   .cargando{
-    display: inherit;
-    font-size: 100px;
-    }
-    .contenedor{
-      display: flex;
-      height: 100vh;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap:50px;
-      align-items: center;
-      background-color:#646562;
-      font-weight: bold;
-  }
-  .display{
-    display: none;
-}
-  .label{
-    font-size:24px;
-    height: 28px;
+  body{
+      margin:0;
   
   }
-  .form{
-    font-weight: bold;
+    .gap{
+      margin-bottom:20px;
+    }
+    @media (min-width: 769px) {
+      .gap{
+        margin-bottom:50px;
+      }
   }
-  .botonAnim:hover{
-    background-color: #008CBA;
-    color: white;
-    
-  }
-  .h1{
-    font-size: 52px;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
+  .text-container{
+     
+     max-width:317px;
+  }   
+  .buttom-container{
+    width:100%;
+    max-width:404px;
 }
   
   .boton{
-    
-      cursor: pointer;
+    cursor: pointer;
       padding:10px;
       margin-top:5vh;
       width: 100%;
@@ -74,7 +63,6 @@ export class FullRoom extends HTMLElement {
       background-color: #0AAC11;
       border-radius: 4px;
       font-weight: bold;
-    
 
   }
   .input{
@@ -82,6 +70,61 @@ export class FullRoom extends HTMLElement {
     height: 55px;
     font-weight: bold;
     margin-bottom:15px;
+}
+.move-container{
+  display:flex;
+  width:100%;
+  position: fixed;
+  bottom: 10px;
+  left:1vh;
+  height: 150px;
+  justify-content: center;
+  padding:0 5px;
+
+}
+@media (min-width: 769px) {
+  .move-container{
+      height: 21.277481vh;
+      width:500px;
+      padding:0;
+      gap:67px;
+      left:inherit;
+
+  }
+}
+.hand{
+            
+}
+@media (min-width: 769px) {
+    .hand{
+        width:100%;
+    }
+}
+.desktop{}
+@media (min-width: 769px) {
+    .desktop{
+        display:flex;
+        width:100%;
+        
+        justify-content: center;
+    }
+}
+.container{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: baseline;
+  height: 110vh;
+  padding:0 20px;
+  gap:20px;
+}
+@media (min-width: 769px) {
+  .container {
+     
+      height: inherit;
+
+  }
 }`;
 
     this.appendChild(style);

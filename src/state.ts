@@ -1,3 +1,4 @@
+// const API_BASE_URL = "http://localhost:3000";
 const API_BASE_URL = "https://api-piedra-papel-tijeras.herokuapp.com";
 import { rtdb } from "./rtdb";
 import map from "lodash/map";
@@ -115,8 +116,10 @@ const state = {
 
     if (win1 == true) {
       data.win.push(0);
-    } else {
+    } else if (win2 == true) {
       data.win.push(1);
+    } else {
+      console.log("empate");
     }
 
     if (win1 == true) {
