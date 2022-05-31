@@ -33,27 +33,6 @@ export class RegisterNameRoom extends HTMLElement {
       state.userToRoom(() => {
         Router.go("/goRoom");
       });
-      // if ((state.getState().name = "")) {
-      //   window.alert("No se ingreso un nombre");
-      //   Router.go("/");
-      // } else {
-
-      // }
-
-      //   {
-      //     "roomId":"7lIyFz6uIC_mevwxEVzKY",
-      //     "currentGame": [{"choice": "piedra",
-      //           "name":"marcos",
-      //           "online": true,
-      //           "start": true}
-
-      //         ,{
-      //           "choice": "tijera",
-      //           "name":"pepe",
-      //           "online": true,
-      //           "start": true
-      //         }]
-      // }
     });
   }
   render() {

@@ -20,11 +20,8 @@ export class GoRoom extends HTMLElement {
 
     formulario.addEventListener("submit", (e) => {
       e.preventDefault();
-
       load.classList.replace("display", "cargando");
-
       hidden.classList.add("display");
-
       const targete = e.target as any;
 
       if (targete.room.value == "") {
@@ -37,12 +34,8 @@ export class GoRoom extends HTMLElement {
       state.accesToRoom(
         () => {
           const cs = state.getState();
-          console.log(state.getState().roomId);
           window.setTimeout(() => {
             if (cs.currentGame.length == 1) {
-              console.log(cs.currentGame.length);
-              console.log(cs.currentGame);
-              console.log("puedes ingresar hay 1 solo jugador");
               state.playerPushStatus();
               Router.go("/wait");
             } else if (
@@ -51,22 +44,10 @@ export class GoRoom extends HTMLElement {
               (cs.currentGame[1].name == cs.name &&
                 cs.currentGame[0].name !== cs.name)
             ) {
-              console.log(
-                "puedes ingresar tu nombre coincide con los jugadores"
-              );
-              console.log(state.getState().playerRef);
-
               Router.go("/wait");
-              // state.playerPushStatus();
             } else if (cs.currentGame.length >= 2) {
-              console.log(cs.currentGame.length);
-              console.log(cs.currentGame);
-              console.log(
-                "no puedes ingresar se llego al limite de jugadores y tu nombre no coincide con ninguno"
-              );
               Router.go("/fullRoom");
             } else {
-              console.log("no puedes ingresar");
               Router.go("/fullRoom");
             }
           }, 3000);
@@ -109,10 +90,7 @@ export class GoRoom extends HTMLElement {
    body{
     
    }
-   .center-h3{
-    width: 100%;
-    text-align:center;
-   }
+   
     .container{
       display: flex;
       width: 100%;

@@ -4,9 +4,7 @@ import { state } from "../../state";
 export class FullRoom extends HTMLElement {
   connectedCallback() {
     this.render();
-
     const inicio = document.querySelector(".inicio");
-
     inicio.addEventListener("click", () => {
       Router.go("/");
     });

@@ -31,7 +31,6 @@ export class Play extends HTMLElement {
       hand1.classList.add("userAnimation");
       hand2.classList.replace("displayNone", "opacity");
       hand3.classList.replace("displayNone", "opacity");
-      console.log(state.getState().choice);
     });
     papel.addEventListener("click", () => {
       state.setChoice("papel");
@@ -46,8 +45,6 @@ export class Play extends HTMLElement {
       hand2.classList.add("userAnimation");
       hand1.classList.replace("displayNone", "opacity");
       hand3.classList.replace("displayNone", "opacity");
-
-      console.log(state.getState().choice);
     });
     tijeras.addEventListener("click", () => {
       state.setChoice("tijeras");
@@ -62,8 +59,6 @@ export class Play extends HTMLElement {
       hand3.classList.add("userAnimation");
       hand1.classList.replace("displayNone", "opacity");
       hand2.classList.replace("displayNone", "opacity");
-
-      console.log(state.getState().choice);
     });
     setTimeout(() => {
       Router.go("/plays");
@@ -101,13 +96,11 @@ export class Play extends HTMLElement {
     animation-duration: 1s;
     animation-name: toTop;
   }
-
   .counter{
     color:red;
     margin-top:20vh;
     width:15rem;  
 }
-  
   @keyframes toTop {
     from {
         margin-top: 25%;
@@ -117,16 +110,10 @@ export class Play extends HTMLElement {
         margin-bottom: 100px;
     }
   }
-
-
-
-
-
   body{
     margin:0;
   
   }
-  
    .opacity{
     display:inherit;
     opacity: 0.5;
@@ -152,85 +139,7 @@ export class Play extends HTMLElement {
       background-color:#646562;
       font-weight: bold;
   }
-  .label{
-    font-size:24px;
-    height: 28px;
-  
-  }
-  .form{
-    font-weight: bold;
-  }
-  .botonAnim:hover{
-    background-color: #008CBA;
-    color: white;
-  }
-  .h1{
-    font-size: 52px;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-}
-  
-  .boton{
-    cursor: pointer;
-      padding:10px;
-      margin-top:5vh;
-      width: 100%;
-      font-size:22px;
-      border: solid 1px;
-      background-color: #0AAC11;
-      border-radius: 4px;
-      font-weight: bold;
 
-  }
-  .input{
-    width: 100%;
-    height: 55px;
-    font-weight: bold;
-    margin-bottom:15px;
-}
-
-
-
-
-
-
- 
-
-.gap{
-  margin-bottom:20px;
-}
-@media (min-width: 769px) {
-  .gap{
-    margin-bottom:50px;
-  }
-}
-.text-container{
- 
- max-width:317px;
-}   
-.buttom-container{
-width:100%;
-max-width:404px;
-}
-
-.boton{
-cursor: pointer;
-  padding:10px;
-  margin-top:5vh;
-  width: 100%;
-  font-size:22px;
-  border: solid 1px;
-  background-color: #0AAC11;
-  border-radius: 4px;
-  font-weight: bold;
-
-}
-.input{
-width: 100%;
-height: 55px;
-font-weight: bold;
-margin-bottom:15px;
-}
 .move-container{
 display:flex;
 width:100%;
@@ -265,7 +174,6 @@ padding:0 5px;
 .desktop{
     display:flex;
     width:100%;
-    
     justify-content: center;
 }
 }

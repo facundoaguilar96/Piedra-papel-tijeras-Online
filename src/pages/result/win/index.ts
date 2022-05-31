@@ -4,15 +4,24 @@ import { state } from "../../../state";
 export class Win extends HTMLElement {
   connectedCallback() {
     this.render();
+    window.addEventListener("unload", () => {
+      state.playerOffline();
+      state.playerNotReady();
+    });
+
     const ready = document.querySelector(".send");
     ready.addEventListener("click", () => {
-      state.playerNotReady();
-      // Router.go("/rules");
+      state.restartMove();
+      Router.go("/rules");
     });
     window.addEventListener("beforeunload", function (event) {
       state.playerOffline();
       state.playerNotReady();
     });
+    window.onbeforeunload = function () {
+      state.playerOffline();
+      state.playerNotReady();
+    };
   }
   game = state.filterWin();
   name = state.getState().currentGame[0].name;

@@ -3,10 +3,6 @@ const API_BASE_URL = "https://api-piedra-papel-tijeras.herokuapp.com";
 import { rtdb } from "./rtdb";
 import map from "lodash/map";
 import { Router } from "@vaadin/router";
-type jugada = {
-  from: string;
-  mensaje: string;
-};
 
 const state = {
   data: {
@@ -21,6 +17,7 @@ const state = {
     player2Ref: {},
 
     win: [],
+    gameStart: false,
 
     playerOnline: "",
     playerOnline2: "",
@@ -28,25 +25,20 @@ const state = {
     player1Choice: "",
     player2Choice: "",
 
-    player1Ready: false,
-    player2Ready: false,
+    player1Ready: "",
+    player2Ready: "",
   },
   listeners: [],
   ListenRoomOnline() {
     const cs = state.getState();
-    console.log(cs.rtdbRoomId);
     const chatrooms = rtdb.ref("/rooms/" + cs.rtdbRoomId);
     chatrooms.on("value", (snap) => {
       const valor = snap.val();
-      console.log(valor);
       const game = map(valor.currentGame);
 
       const online = game[0].online;
       const player2 = game[1]?.name;
 
-      // cs.player2Ref = { ref: game[1]?.ref, userId: game[1]?.userId };
-
-      console.log(game);
       cs.currentGame = game;
       cs.namePlayer2 = player2;
 
@@ -60,6 +52,11 @@ const state = {
       cs.player2Ready = game[1]?.start;
       this.setState(cs);
     });
+  },
+  gameStart(data) {
+    const cs = this.getState();
+    cs.gameStart = data;
+    state.setState(cs);
   },
   pushWinner() {
     const cs = this.getState();
@@ -94,6 +91,26 @@ const state = {
     let counterPlayers = { counterPlayer1, counterPlayer2 };
     return counterPlayers;
   },
+  restartMove() {
+    const cs = this.getState();
+    const ref = cs.playerRef.ref;
+    fetch(API_BASE_URL + "/game/choice", {
+      method: "put",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        roomId: cs.rtdbRoomId,
+        ref: ref,
+        choice: "",
+        userId: cs.userId,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {});
+  },
 
   whoWins() {
     const data = this.getState();
@@ -119,11 +136,9 @@ const state = {
     } else if (win2 == true) {
       data.win.push(1);
     } else {
-      console.log("empate");
     }
 
     if (win1 == true) {
-      console.log("gano player ", data.currentGame[0].name);
       if (data.name == data.currentGame[0].name) {
         this.pushWinner();
         Router.go("/win");
@@ -137,18 +152,15 @@ const state = {
       } else {
         Router.go("/loose");
       }
-      console.log("gano player ", data.currentGame[1].name);
     } else {
-      console.log("empate");
       Router.go("/tie");
     }
   },
   playerReady() {
     const cs = this.getState();
     const ref = cs.playerRef.ref;
-    console.log(ref);
 
-    fetch(API_BASE_URL + "/ready", {
+    fetch(API_BASE_URL + "/game/ready", {
       method: "put",
       headers: {
         "content-type": "application/json",
@@ -168,9 +180,7 @@ const state = {
   playerNotReady() {
     const cs = this.getState();
     const ref = cs.playerRef.ref;
-    console.log(ref);
-
-    fetch(API_BASE_URL + "/ready", {
+    fetch(API_BASE_URL + "/game/ready", {
       method: "put",
       headers: {
         "content-type": "application/json",
@@ -190,9 +200,8 @@ const state = {
   playerOffline() {
     const cs = this.getState();
     const ref = cs.playerRef.ref;
-    console.log(ref);
-
-    fetch(API_BASE_URL + "/online", {
+    this.gameStart(false);
+    fetch(API_BASE_URL + "/game/online", {
       method: "put",
       headers: {
         "content-type": "application/json",
@@ -212,9 +221,7 @@ const state = {
   playerOnline() {
     const cs = this.getState();
     const ref = cs.playerRef.ref;
-    console.log(ref);
-
-    fetch(API_BASE_URL + "/online", {
+    fetch(API_BASE_URL + "/game/online", {
       method: "put",
       headers: {
         "content-type": "application/json",
@@ -229,17 +236,14 @@ const state = {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
-        console.log("player de nuevo online");
-      });
+      .then((data) => {});
   },
 
   playerChoice() {
     const cs = this.getState();
     const ref = cs.playerRef.ref;
-    console.log(ref);
 
-    fetch(API_BASE_URL + "/choice", {
+    fetch(API_BASE_URL + "/game/choice", {
       method: "put",
       headers: {
         "content-type": "application/json",
@@ -280,7 +284,7 @@ const state = {
 
   playerPushStatus() {
     const cs = this.getState();
-    fetch(API_BASE_URL + "/status", {
+    fetch(API_BASE_URL + "/game/status", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -306,8 +310,6 @@ const state = {
   },
   pushRefPlayer1Db() {
     const cs = this.getState();
-
-    console.log(cs.roomId);
     fetch(API_BASE_URL + "/rooms/" + cs.roomId + "/game", {
       method: "put",
       headers: {
@@ -326,8 +328,6 @@ const state = {
   },
   pushRefPlayer2Db() {
     const cs = this.getState();
-
-    console.log(cs.roomId);
     fetch(API_BASE_URL + "/rooms/" + cs.roomId + "/game", {
       method: "put",
       headers: {
@@ -337,8 +337,6 @@ const state = {
       body: JSON.stringify({
         userId2: cs.userId,
         ref2: cs.playerRef.ref,
-        // userId2: cs.currentGame[1].userId,
-        // ref2: cs.player2Ref.ref,
       }),
     })
       .then((res) => {
@@ -351,14 +349,13 @@ const state = {
     for (const cb of this.listeners) {
       cb();
     }
-    console.log("hola soy el state, he cambiado", this.getState());
   },
   subscribe(callback) {
     this.listeners.push(callback);
   },
   registerUser(callback?, err?) {
     const cs = this.getState();
-    fetch(API_BASE_URL + "/signup", {
+    fetch(API_BASE_URL + "/user/signup", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -372,9 +369,7 @@ const state = {
         if (data.message) {
           this.authUser(() => {
             this.askNewRoom(() => {
-              console.log(this.getState().roomId);
               this.accesToRoom(() => {
-                console.log(this.getState());
                 this.playerPushStatus();
                 Router.go("/wait");
               });
@@ -390,7 +385,7 @@ const state = {
   },
   userToRoom(callback?, err?) {
     const cs = this.getState();
-    fetch(API_BASE_URL + "/signup", {
+    fetch(API_BASE_URL + "/user/signup", {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -403,26 +398,25 @@ const state = {
       .then((data) => {
         if (data.message) {
           this.authUser(() => {
-            console.log("user ya existe y es ", cs.userId);
             Router.go("/goRoom");
           });
           if (err) err();
         } else {
           cs.userId = data.id;
           this.setState(cs);
-          console.log("user creado: ", cs.userId);
+
           callback();
         }
       });
   },
-  connectUserToRoom() {
-    const cs = state.getState();
-    this.accesToRoom();
-  },
+  // connectUserToRoom() {
+  //   const cs = state.getState();
+  //   this.accesToRoom();
+  // },
   authUser(callback?, err?) {
     const cs = this.getState();
     if (cs.name) {
-      fetch(API_BASE_URL + "/auth", {
+      fetch(API_BASE_URL + "/user/auth", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -442,7 +436,6 @@ const state = {
           }
         });
     } else {
-      // window.alert("No se ingreso un nombre");
     }
   },
   askNewRoom(callback?) {
@@ -476,25 +469,19 @@ const state = {
         return res.json();
       })
       .then((data) => {
-        console.log(data.userId1);
-
         if (data.userId1 == cs.userId) {
           cs.playerRef = { ref: data.ref1, userId: data.userId1 };
         } else if (data.userId2 == cs.userId) {
           cs.playerRef = { ref: data.ref2, userId: data.userId2 };
         }
 
-        console.log(data);
         if (data.winners) cs.win = data.winners;
         cs.rtdbRoomId = data.rtdbRoomId;
         this.setState(cs);
         this.playerOnline();
         this.ListenRoomOnline();
-        console.log(this.getState().playerRef);
 
         if (data.message) {
-          console.log(data.message);
-
           err();
         } else {
           if (callback) callback();

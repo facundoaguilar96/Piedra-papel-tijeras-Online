@@ -4,17 +4,14 @@ import { state } from "../../state";
 export class Rules extends HTMLElement {
   connectedCallback() {
     this.render();
-
-    const cs = state.getState();
-    console.log(cs.win);
-    const ready = document.querySelector(".ready");
-    const hidden = document.querySelector(".hidden");
-    const listo = document.querySelector(".listo");
-
     window.addEventListener("beforeunload", function (event) {
       state.playerOffline();
       state.playerNotReady();
     });
+    state.gameStart(true);
+    const ready = document.querySelector(".ready");
+    const hidden = document.querySelector(".hidden");
+    const listo = document.querySelector(".listo");
 
     ready.addEventListener("click", () => {
       state.playerReady();
@@ -24,14 +21,8 @@ export class Rules extends HTMLElement {
 
     state.subscribe(() => {
       const cs = state.getState();
-      console.log("ejecutando funcion player listos");
-      console.log(cs.player1Ready);
-      console.log(cs.player2Ready);
-      // && cs.player2Ready == true
-      if (cs.player1Ready == true && cs.player2Ready == true) {
-        console.log("entre en este if");
+      if (cs.currentGame[0].start && cs.currentGame[1].start) {
         Router.go("/play");
-      } else {
       }
     });
   }

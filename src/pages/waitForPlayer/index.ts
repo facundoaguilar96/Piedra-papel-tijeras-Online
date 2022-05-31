@@ -4,36 +4,32 @@ import { state } from "../../state";
 export class Waiting extends HTMLElement {
   connectedCallback() {
     this.render();
-    const boton = document.querySelector(".boton");
-
-    window.addEventListener("beforeunload", function (event) {
+    this.addEventListener("beforeunload", function (event) {
       state.playerOffline();
     });
-    this.playersCompleteAndRef();
+    window.onbeforeunload = function () {
+      state.playerOffline();
+    };
 
     state.subscribe(() => {
-      const cs = state.getState();
       this.playersCompleteAndRef();
-      if (cs.playerOnline == true && cs.playerOnline2 == true) {
-        Router.go("/rules");
-      }
     });
   }
   room = state.getState().roomId;
 
   playersCompleteAndRef() {
     const cs = state.getState();
-    if (cs.playerOnline == true && cs.playerOnline2 == true) {
+    if (
+      cs.gameStart == false &&
+      cs.playerOnline == true &&
+      cs.playerOnline2 == true
+    ) {
       if (cs.userId == cs.currentGame[0].userId) {
-        console.log(state.getState());
-
         state.pushRefPlayer1Db();
-        Router.go("/rules");
       } else {
-        console.log(state.getState());
         state.pushRefPlayer2Db();
-        Router.go("/rules");
       }
+      Router.go("/rules");
     }
   }
   render() {

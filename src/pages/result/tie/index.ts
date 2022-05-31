@@ -7,9 +7,10 @@ export class Tie extends HTMLElement {
 
     const ready = document.querySelector(".send");
     ready.addEventListener("click", () => {
-      state.playerNotReady();
-      // Router.go("/rules");
+      state.restartMove();
+      Router.go("/rules");
     });
+
     window.addEventListener("beforeunload", function (event) {
       state.playerOffline();
       state.playerNotReady();
@@ -31,6 +32,7 @@ export class Tie extends HTMLElement {
             </div>
     </div></div>
     <div class="desktop"><div class="buttom-container"><button-comp class="send">volver a jugar</button-comp></div></div>
+    
     </div>
         `;
     const style = document.createElement("style");

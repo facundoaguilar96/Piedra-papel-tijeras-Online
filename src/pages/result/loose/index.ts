@@ -4,10 +4,11 @@ import { state } from "../../../state";
 export class Loose extends HTMLElement {
   connectedCallback() {
     this.render();
+
     const ready = document.querySelector(".send");
     ready.addEventListener("click", () => {
-      state.playerNotReady();
-      // Router.go("/rules");
+      state.restartMove();
+      Router.go("/rules");
     });
     window.addEventListener("beforeunload", function (event) {
       state.playerOffline();

@@ -31,11 +31,8 @@ export class Register extends HTMLElement {
       }
 
       state.registerUser(() => {
-        // console.log(state.getState().userId);
         state.askNewRoom(() => {
-          // console.log(state.getState().roomId);
           state.accesToRoom(() => {
-            console.log(state.getState());
             state.playerPushStatus();
             Router.go("/wait");
           });
@@ -108,11 +105,6 @@ export class Register extends HTMLElement {
     color: white;
     
   }
-  .h1{
-    font-size: 52px;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: bold;
-}
   
   .boton{
     width:100%;
